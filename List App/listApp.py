@@ -158,4 +158,4 @@ settings.update({'dateToggle': str(timeToggled)})
 with open(config_dir, "w") as f:
     f.write(f"dateToggle = {settings.get('dateToggle')}")
     
-print("commit test")
+print("commit test2")
