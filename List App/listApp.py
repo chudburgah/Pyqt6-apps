@@ -165,5 +165,3 @@ app.exec()
 settings.update({'dateToggle': str(timeToggled)})
 with open(Path("listAppConfig") / "config.txt", "w") as f:
     f.write(f"dateToggle = {settings.get('dateToggle')}")
-
-print("Lucas is the best coder ever")
