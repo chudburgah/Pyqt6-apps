@@ -4,22 +4,24 @@ import datetime
 import sys
 import os
 
-
-#make sure the files and folders actually exists
-if not os.path.exists("listAppConfig"):
-    os.mkdir("listAppConfig")
-if not os.path.exists("savedLists"):
-    os.mkdir("savedLists")
-
-with open(Path("listAppConfig") / "list.log", "a"):
-    pass
-with open(Path("listAppConfig") / "config.txt", "a"):
-    pass
-
 settings = {}
 timeToggled = bool()
+script_dir = Path(__file__).resolve().parent
 
-with open(Path("listAppConfig") / "config.txt", "r") as file:
+config_dir = script_dir / "listAppConfig" / "config.txt"
+list_dir = script_dir / "listAppConfig" / "list.log"
+savedLists_dir = script_dir / "savedLists"
+
+#make sure the files and folders actually exists
+config_dir.parent.mkdir(parents=True, exist_ok=True)
+savedLists_dir.mkdir(parents=True, exist_ok=True)
+
+with open(list_dir, "a"):
+    pass
+with open(config_dir, "a"):
+    pass
+
+with open(config_dir, "r") as file:
     for line in file:
         if "=" in line:
             name, value = line.split("=", 1)
@@ -34,15 +36,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("List app")
         self.setMinimumSize(250,150)
         self.resize(250, 300)
-
-        # 1. Get the directory where this script lives
-        basedir = Path(__file__).resolve().parent
-        
-        # 2. Construct the path to the icon in the subfolder
-        icon_path = basedir / "listAppConfig" / "thomasfolk.jpg"
-        
-        # 3. Set the icon
-        self.setWindowIcon(QIcon(str(icon_path)))
 
         #create the buttons, text box (label), ect.
         self.button = QPushButton("Add to list")
@@ -104,7 +97,7 @@ class MainWindow(QMainWindow):
         self.update_list()
 
     def add_to_list(self):
-        with open(Path("listAppConfig") / "list.log", "a") as f:
+        with open(list_dir, "a") as f:
             if timeToggled:
                 f.write(f"> {self.input.text()}  |  {datetime.datetime.now().strftime("%X")}\n")
             else:
@@ -114,15 +107,15 @@ class MainWindow(QMainWindow):
         self.update_list()
         
     def clear_list(self):
-        with open(Path("listAppConfig") / "list.log", "w") as f:
+        with open(list_dir, "w") as f:
             f.write("")
             
         self.update_list()
         
     def remove_last_line(self):
-        with open(Path("listAppConfig") / "list.log", "r") as f:
+        with open(list_dir, "r") as f:
             lines = f.readlines()
-        with open(Path("listAppConfig") / "list.log", "w") as f:
+        with open(list_dir, "w") as f:
             f.writelines(lines[:-1])
             
         self.update_list()
@@ -132,7 +125,7 @@ class MainWindow(QMainWindow):
         timeToggled = not timeToggled
 
     def update_list(self):
-        with open(Path("listAppConfig") / "list.log", "r") as f:
+        with open(list_dir, "r") as f:
             list = f.read()
         self.label.setText(list)
         
@@ -142,17 +135,16 @@ class MainWindow(QMainWindow):
         
         clickedButton = dlg.exec()
         if clickedButton == 1:            
-            with open(Path("listAppConfig") / "list.log", 'r') as f:
+            with open(list_dir, 'r') as f:
                 file = f.read()
-            with open(Path("savedLists") / f"{dlg.textValue()}.txt", 'w') as f:
+            with open(savedLists_dir / f"{dlg.textValue()}.txt", 'w') as f:
                 f.write(file)
                 
     def open_folder(self):
-        dir = Path("savedLists")
         try:
-            os.startfile(dir)
+            os.startfile(savedLists_dir)
         except:
-            subprocess.run(["xdg-open", dir], check=True) 
+            subprocess.run(["xdg-open", savedLists_dir], check=True) 
                    
 
 app = QApplication(sys.argv)
@@ -163,5 +155,5 @@ window.show()
 app.exec()
 
 settings.update({'dateToggle': str(timeToggled)})
-with open(Path("listAppConfig") / "config.txt", "w") as f:
+with open(config_dir, "w") as f:
     f.write(f"dateToggle = {settings.get('dateToggle')}")
