@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
         self.removeLineButton = QPushButton("Remove last item")
         self.toggleTimebutton = QPushButton("Incldue time")
         self.saveListButton = QPushButton("Save list")
-        self.openFolderButton = QPushButton("Open folder")
+        self.openFolderButton = QPushButton("Open Save")
         self.input = QLineEdit("")
         self.label = QLabel()
         self.scrollArea = QScrollArea()
@@ -125,9 +125,16 @@ class MainWindow(QMainWindow):
         timeToggled = not timeToggled
 
     def update_list(self):
+        global dropDownList
+        saveList = os.listdir(script_dir / "savedLists")
+        
         with open(list_dir, "r") as f:
             list = f.read()
         self.label.setText(list)
+        
+        dropDownList = ["None"]
+        for i in range(len(saveList)):
+            dropDownList.append(saveList[i])
         
     def save_list_to_file(self):
         dlg = QInputDialog()
@@ -139,13 +146,50 @@ class MainWindow(QMainWindow):
                 file = f.read()
             with open(savedLists_dir / f"{dlg.textValue()}.txt", 'w') as f:
                 f.write(file)
+        self.update_list()
                 
     def open_folder(self):
-        try:
-            os.startfile(savedLists_dir)
-        except:
-            subprocess.run(["xdg-open", savedLists_dir], check=True) 
-                   
+        dlg = FileSelection(self)
+        
+        if dlg.exec():
+            try:
+                with open(savedLists_dir / dlg.selection, "r") as f:
+                    fileWrite = f.read()
+                with open(list_dir, "w") as f:
+                    f.write(fileWrite)
+                self.update_list()
+                    
+            except:
+                print("Error opening file")
+
+class FileSelection(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.setWindowTitle(" ")
+        self.setFixedSize(200, 100)
+        
+        widget = QComboBox()
+        widget.addItems(dropDownList)
+
+        widget.currentTextChanged.connect(self.text_changed)
+        
+        QBtn = (
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
+
+        self.buttonBox = QDialogButtonBox(QBtn)
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+
+        layout = QVBoxLayout()
+        layout.addWidget(widget)
+        layout.addWidget(self.buttonBox)
+        self.setLayout(layout)        
+
+    def text_changed(self, s):  # s is a str       
+        if s != "None":
+            self.selection = script_dir / "savedLists" / s
 
 app = QApplication(sys.argv)
 
