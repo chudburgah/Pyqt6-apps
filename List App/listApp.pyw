@@ -150,10 +150,10 @@ class MainWindow(QMainWindow):
                     file = f.read()
                 with open(savedLists_dir / f"{dlg.textValue()}.txt", 'w') as f:
                     f.write(file)
-                print("write")
+                print(f"Write to file: {dlg.textValue()}.txt")
             else:
                 Path(savedLists_dir / f"{dlg.textValue()}.txt").unlink(missing_ok=True)
-                print("deleted")
+                print(f"Deleted: {dlg.textValue()}.txt")
         self.update_list()
                 
     def open_save(self):
@@ -165,9 +165,10 @@ class MainWindow(QMainWindow):
                     fileWrite = f.read()
                 with open(list_dir, "w") as f:
                     f.write(fileWrite)
+                print(f"Opened: {savedLists_dir / dlg.selection}.txt")
                 self.update_list() 
             except:
-                print("Error opening file")
+                print("Error reading file")
 
 class FileSelection(QDialog):
     def __init__(self, parent=None):
