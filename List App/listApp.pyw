@@ -29,6 +29,17 @@ with open(config_dir, "r") as file:
 if settings.get('dateToggle') == 'True':
     timeToggled = True
 
+#display hint if log is empty
+with open(list_dir, "r") as f:
+    if f.read() == "":
+        with open(list_dir, "a") as f:
+                f.write("""> This is a very simple note taking app
+> Please do not expect much of this app (and the spelling that is found within it)
+> Saving files is as easy as adding to the list and naming it whatver you want
+> To over wirte a file just save the list with the same name as the old file
+> To delete a file just save a completely empty list with the same name as the old file
+> Thank you for using this software, many thanks Lucas <3""")
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -41,7 +52,7 @@ class MainWindow(QMainWindow):
         self.button = QPushButton("Add to list")
         self.clearbutton = QPushButton("Clear list")
         self.removeLineButton = QPushButton("Remove last item")
-        self.toggleTimebutton = QPushButton("Incldue time")
+        self.toggleTimebutton = QPushButton("Include time")
         self.saveListButton = QPushButton("Save list")
         self.openFolderButton = QPushButton("Open Save")
         self.input = QLineEdit("")
@@ -150,10 +161,10 @@ class MainWindow(QMainWindow):
                     file = f.read()
                 with open(savedLists_dir / f"{dlg.textValue()}.txt", 'w') as f:
                     f.write(file)
-                print(f"Write to file: {dlg.textValue()}.txt")
+                print(f"Write to file: {savedLists_dir / dlg.textValue()}.txt")
             else:
                 Path(savedLists_dir / f"{dlg.textValue()}.txt").unlink(missing_ok=True)
-                print(f"Deleted: {dlg.textValue()}.txt")
+                print(f"Deleted: {savedLists_dir / dlg.textValue()}.txt")
         self.update_list()
                 
     def open_save(self):
@@ -165,7 +176,7 @@ class MainWindow(QMainWindow):
                     fileWrite = f.read()
                 with open(list_dir, "w") as f:
                     f.write(fileWrite)
-                print(f"Opened: {savedLists_dir / dlg.selection}.txt")
+                print(f"Opened: {dlg.selection}.txt")
                 self.update_list() 
             except:
                 print("Error reading file")
