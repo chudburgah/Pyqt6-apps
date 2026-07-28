@@ -144,11 +144,16 @@ class MainWindow(QMainWindow):
         dlg.setLabelText("Save file with name:")
         
         clickedButton = dlg.exec()
-        if clickedButton == 1:            
-            with open(list_dir, 'r') as f:
-                file = f.read()
-            with open(savedLists_dir / f"{dlg.textValue()}.txt", 'w') as f:
-                f.write(file)
+        if clickedButton == 1:
+            if self.label.text() != "":
+                with open(list_dir, 'r') as f:
+                    file = f.read()
+                with open(savedLists_dir / f"{dlg.textValue()}.txt", 'w') as f:
+                    f.write(file)
+                print("write")
+            else:
+                Path(savedLists_dir / f"{dlg.textValue()}.txt").unlink(missing_ok=True)
+                print("deleted")
         self.update_list()
                 
     def open_save(self):
