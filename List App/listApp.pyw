@@ -168,7 +168,7 @@ class FileSelection(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setWindowTitle(" ")
+        self.setWindowTitle("Chose save file:")
         self.setFixedSize(200, 100)
         
         widget = QComboBox()
