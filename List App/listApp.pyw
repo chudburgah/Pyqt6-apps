@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(250,150)
         self.resize(250, 300)
 
-        #create the buttons, text box (label), ect.
+        #create the and label buttons, text box (label), ect.
         self.button = QPushButton("Add to list")
         self.clearbutton = QPushButton("Clear list")
         self.removeLineButton = QPushButton("Remove last item")
@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         self.label = QLabel()
         self.scrollArea = QScrollArea()
         
-        #giving the text box a scroll bar
+        #place the text box into a scrollArea to give it a scoll bar
         self.label.setWordWrap(True)
         self.label.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.scrollArea.setWidgetResizable(True)
@@ -57,7 +57,8 @@ class MainWindow(QMainWindow):
         
         self.scrollArea.setWidget(self.label)
         
-        #what happens when the buttons are pressed
+        #what functions need to be called when a button is pressed or there is text in the input box
+        #set the time button to checkable for a toggle effect
         self.button.clicked.connect(self.add_to_list)
         self.clearbutton.clicked.connect(self.clear_list)
         self.removeLineButton.clicked.connect(self.remove_last_line)
@@ -65,7 +66,7 @@ class MainWindow(QMainWindow):
         self.toggleTimebutton.setChecked(timeToggled)
         self.toggleTimebutton.clicked.connect(self.toggle_time)
         self.saveListButton.clicked.connect(self.save_list_to_file)
-        self.openFolderButton.clicked.connect(self.open_folder)
+        self.openFolderButton.clicked.connect(self.open_save)
         self.input.returnPressed.connect(self.add_to_list)
         
 
@@ -79,10 +80,11 @@ class MainWindow(QMainWindow):
         layout2.addWidget(self.removeLineButton,1,0)
         layout2.addWidget(self.toggleTimebutton,1,1)
         
+        #these buttons are in a different position than the other ones
         layout3.addWidget(self.saveListButton) 
         layout3.addWidget(self.openFolderButton)
         
-        #adds the grid layout to the main vertical layout along with the text box and label
+        #nest layouts, input and scroll area into the main layout
         layout1.addLayout(layout2)
         layout1.addWidget(self.input)
         layout1.addWidget(self.scrollArea) 
@@ -91,6 +93,7 @@ class MainWindow(QMainWindow):
         container = QWidget()
         container.setLayout(layout1)
         
+        #set the widget to be layout1
         self.setCentralWidget(container)
         
         #load the list from the list.log file
@@ -148,7 +151,7 @@ class MainWindow(QMainWindow):
                 f.write(file)
         self.update_list()
                 
-    def open_folder(self):
+    def open_save(self):
         dlg = FileSelection(self)
         
         if dlg.exec():
@@ -157,8 +160,7 @@ class MainWindow(QMainWindow):
                     fileWrite = f.read()
                 with open(list_dir, "w") as f:
                     f.write(fileWrite)
-                self.update_list()
-                    
+                self.update_list() 
             except:
                 print("Error opening file")
 
@@ -187,7 +189,7 @@ class FileSelection(QDialog):
         layout.addWidget(self.buttonBox)
         self.setLayout(layout)        
 
-    def text_changed(self, s):  # s is a str       
+    def text_changed(self, s):       
         if s != "None":
             self.selection = script_dir / "savedLists" / s
 
