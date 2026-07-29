@@ -176,7 +176,7 @@ class MainWindow(QMainWindow):
                     fileWrite = f.read()
                 with open(list_dir, "w") as f:
                     f.write(fileWrite)
-                print(f"Opened: {dlg.selection}.txt")
+                print(f"Opened: {dlg.selection}")
                 self.update_list() 
             except:
                 print("Error reading file")
