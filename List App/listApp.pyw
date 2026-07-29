@@ -149,7 +149,7 @@ class MainWindow(QMainWindow):
         dropDownList = ["None"]
         for i in range(len(saveList)):
             dropDownList.append(saveList[i])
-        
+    
     def save_list_to_file(self):
         dlg = QInputDialog()
         dlg.setLabelText("Save file with name:")
@@ -166,7 +166,7 @@ class MainWindow(QMainWindow):
                 Path(savedLists_dir / f"{dlg.textValue()}.txt").unlink(missing_ok=True)
                 print(f"Deleted: {savedLists_dir / dlg.textValue()}.txt")
         self.update_list()
-                
+    
     def open_save(self):
         dlg = FileSelection(self)
         
