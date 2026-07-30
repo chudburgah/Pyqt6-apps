@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
         self.toggleTimebutton.setCheckable(True)
         self.toggleTimebutton.setChecked(timeToggled)
         self.toggleTimebutton.clicked.connect(self.toggle_time)
-        self.saveListButton.clicked.connect(self.save_list_to_file)
+        self.saveListButton.clicked.connect(self.save_or_delete_file)
         self.openFolderButton.clicked.connect(self.open_save)
         self.input.returnPressed.connect(self.add_to_list)
         
@@ -110,6 +110,8 @@ class MainWindow(QMainWindow):
         #load the list from the list.log file
         self.update_list()
 
+    #Each of these definitions are triggered when a button is pressed
+    #It's not very hard to guess what each of the definitions do
     def add_to_list(self):
         with open(list_dir, "a") as f:
             if timeToggled:
@@ -150,10 +152,12 @@ class MainWindow(QMainWindow):
         for i in range(len(saveList)):
             dropDownList.append(saveList[i])
     
-    def save_list_to_file(self):
+    def save_or_delete_file(self):
         dlg = QInputDialog()
         dlg.setLabelText("Save file with name:")
         
+        #Checks if the 'ok' button was pressed, lets the user input a file name and then checks if the text being saved is not empty.
+        # If it's not empty it saves the log to a .txt file with the name the user inputed. If empty it will delete any files with the inputed name
         clickedButton = dlg.exec()
         if clickedButton == 1:
             if self.label.text() != "":
@@ -170,6 +174,7 @@ class MainWindow(QMainWindow):
     def open_save(self):
         dlg = FileSelection(self)
         
+        #looks into the saved lists directory and lets the user select and open one
         if dlg.exec():
             try:
                 with open(savedLists_dir / dlg.selection, "r") as f:
@@ -184,6 +189,7 @@ class MainWindow(QMainWindow):
 class FileSelection(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
+        #this is a class for the file selection popup as it is more complecated than the file save pop up and requires multipul elements
 
         self.setWindowTitle("Chose save file:")
         self.setFixedSize(200, 100)
