@@ -21,7 +21,6 @@ class MainWindow(QMainWindow):
         self.Log_hint.setWordWrap(True)
         self.Update_propertys_button = QPushButton("Update propertys")
         self.label = QLabel("Update:")
-        self.label.alignment()
         self.Type_selection = QComboBox()
         self.Type_selection.addItems(["Album", "Artist", "Year"])
         
