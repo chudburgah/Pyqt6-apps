@@ -60,15 +60,18 @@ class MainWindow(QMainWindow):
                 print(self.Type_selection.currentIndex())
                 if self.Type_selection.currentIndex() == 0:
                     audiofile['album'] = self.New_property_input.text()
+                    self.Log_hint.setText(f"Upated album for {len(file_path)} song(s)")
                 elif self.Type_selection.currentIndex() == 1:
                     audiofile['artist'] = self.New_property_input.text()
+                    self.Log_hint.setText(f"Upated artist for {len(file_path)} song(s)")
                 elif self.Type_selection.currentIndex() == 2:
                     audiofile['date'] = self.New_property_input.text()
+                    self.Log_hint.setText(f"Upated year for {len(file_path)} song(s)")
                 elif self.Type_selection.currentIndex() == 3:
                     audiofile['genre'] = self.New_property_input.text()
+                    self.Log_hint.setText(f"Upated genre for {len(file_path)} song(s)")
                 
                 audiofile.save()
-                self.Log_hint.setText(f"Upated properties for {len(file_path)} song(s)")
         except Exception as e:
             self.Log_hint.setText(f"Error: {e}")
     
