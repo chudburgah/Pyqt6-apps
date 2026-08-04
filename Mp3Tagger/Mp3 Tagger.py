@@ -15,14 +15,15 @@ class MainWindow(QMainWindow):
         self.resize(210, 150)
         
         self.Open_button = QPushButton("Open file(s)")
-        self.New_album_input = QLineEdit()
-        self.New_album_input.setPlaceholderText("e.g. I Wish")
+        self.New_property_input = QLineEdit()
+        self.New_property_input.setPlaceholderText("e.g. I Wish")
         self.Log_hint = QLabel()
         self.Log_hint.setWordWrap(True)
         self.Update_propertys_button = QPushButton("Update propertys")
         self.label = QLabel("Update:")
         self.Type_selection = QComboBox()
         self.Type_selection.addItems(["Album", "Artist", "Year", "Genre"])
+        self.Type_selection.currentIndexChanged.connect(self.Selection_changed)
         
         self.Open_button.clicked.connect(self.pressed)
         self.Update_propertys_button.clicked.connect(self.Update_file)
@@ -35,7 +36,7 @@ class MainWindow(QMainWindow):
         
         layout1.addWidget(self.Open_button)
         layout1.addLayout(layout2)
-        layout1.addWidget(self.New_album_input)
+        layout1.addWidget(self.New_property_input)
         layout1.addWidget(self.Log_hint)
         layout1.addWidget(self.Update_propertys_button)
         
@@ -58,18 +59,28 @@ class MainWindow(QMainWindow):
                     
                 print(self.Type_selection.currentIndex())
                 if self.Type_selection.currentIndex() == 0:
-                    audiofile['album'] = self.New_album_input.text()
+                    audiofile['album'] = self.New_property_input.text()
                 elif self.Type_selection.currentIndex() == 1:
-                    audiofile['artist'] = self.New_album_input.text()
+                    audiofile['artist'] = self.New_property_input.text()
                 elif self.Type_selection.currentIndex() == 2:
-                    audiofile['date'] = self.New_album_input.text()
+                    audiofile['date'] = self.New_property_input.text()
                 elif self.Type_selection.currentIndex() == 3:
-                    audiofile['genre'] = self.New_album_input.text()
+                    audiofile['genre'] = self.New_property_input.text()
                 
                 audiofile.save()
                 self.Log_hint.setText(f"Upated properties for {len(file_path)} song(s)")
         except Exception as e:
             self.Log_hint.setText(f"Error: {e}")
+            
+    def Selection_changed(self, i):
+        if i == 0:
+            self.New_property_input.setPlaceholderText("e.g. I Wish")
+        if i == 1:
+            self.New_property_input.setPlaceholderText("e.g. Skee-Lo")
+        if i == 2:
+            self.New_property_input.setPlaceholderText("e.g. 1995")
+        if i == 3:
+            self.New_property_input.setPlaceholderText("e.g. Hip-Hop")
   
 app = QApplication(sys.argv)
 
