@@ -22,7 +22,7 @@ class MainWindow(QMainWindow):
         self.label = QLabel("Update:")
         self.Type_selection = QComboBox()
         self.Type_selection.addItems(["Album", "Artist", "Year", "Genre"])
-        self.Type_selection.currentIndexChanged.connect(self.Selection_changed)
+        self.Type_selection.currentIndexChanged.connect(self.Input_hint)
         
         self.Open_button.clicked.connect(self.pressed)
         self.Update_propertys_button.clicked.connect(self.Update_file)
@@ -75,7 +75,7 @@ class MainWindow(QMainWindow):
         except Exception as e:
             self.Log_hint.setText(f"Error: {e}")
     
-    def Selection_changed(self, i):
+    def Input_hint(self, i):
         if i == 0:
             self.New_property_input.setPlaceholderText("e.g. I Wish")
         if i == 1:
