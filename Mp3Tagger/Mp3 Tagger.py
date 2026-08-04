@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import *
 from pathlib import Path
 import sys
 from mutagen.easyid3 import EasyID3
-from mutagen.id3 import ID3
 
 script_dir = Path(__file__).resolve().parent
 
@@ -44,13 +43,14 @@ class MainWindow(QMainWindow):
         container.setLayout(layout1)
         
         self.setCentralWidget(container)
+    
     def pressed(self):
         global file_path
         file_path, _ = QFileDialog.getOpenFileNames(None, "Choose Files", "","Mp3 Files (*.mp3)")
         if file_path:
             for i in range(len(file_path)):
                 print(file_path[int(i)])
-                
+    
     def Update_file(self):
         try:
             for i in range(len(file_path)):
@@ -71,7 +71,7 @@ class MainWindow(QMainWindow):
                 self.Log_hint.setText(f"Upated properties for {len(file_path)} song(s)")
         except Exception as e:
             self.Log_hint.setText(f"Error: {e}")
-            
+    
     def Selection_changed(self, i):
         if i == 0:
             self.New_property_input.setPlaceholderText("e.g. I Wish")
@@ -81,7 +81,7 @@ class MainWindow(QMainWindow):
             self.New_property_input.setPlaceholderText("e.g. 1995")
         if i == 3:
             self.New_property_input.setPlaceholderText("e.g. Hip-Hop")
-  
+
 app = QApplication(sys.argv)
 
 window = MainWindow()
