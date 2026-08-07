@@ -56,18 +56,19 @@ class MainWindow(QMainWindow):
             for i in range(len(file_path)):
                 audio = file_path[i]
                 audiofile = EasyID3(audio)
+                type = self.Type_selection.currentIndex()
                     
                 print(self.Type_selection.currentIndex())
-                if self.Type_selection.currentIndex() == 0:
+                if type == 0:
                     audiofile['album'] = self.New_property_input.text()
                     self.Log_hint.setText(f"Upated album for {len(file_path)} song(s)")
-                elif self.Type_selection.currentIndex() == 1:
+                elif type == 1:
                     audiofile['artist'] = self.New_property_input.text()
                     self.Log_hint.setText(f"Upated artist for {len(file_path)} song(s)")
-                elif self.Type_selection.currentIndex() == 2:
+                elif type == 2:
                     audiofile['date'] = self.New_property_input.text()
                     self.Log_hint.setText(f"Upated year for {len(file_path)} song(s)")
-                elif self.Type_selection.currentIndex() == 3:
+                elif type == 3:
                     audiofile['genre'] = self.New_property_input.text()
                     self.Log_hint.setText(f"Upated genre for {len(file_path)} song(s)")
                 
