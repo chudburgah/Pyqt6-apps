@@ -58,23 +58,14 @@ class MainWindow(QMainWindow):
                 global repeat
                 audio = file_path[i]
                 audiofile = EasyID3(audio)
-                type = self.Type_selection.currentIndex()
                 repeat += 1
+                choices = ['album', 'artist', 'date', 'genre']
                 
                 print(repeat)
                 print(self.Type_selection.currentIndex())
-                if type == 0:
-                    audiofile['album'] = self.New_property_input.text()
-                    self.Log_hint.setText(f"({repeat}) Upated album for {len(file_path)} song(s)")
-                elif type == 1:
-                    audiofile['artist'] = self.New_property_input.text()
-                    self.Log_hint.setText(f"({repeat}) Upated artist for {len(file_path)} song(s)")
-                elif type == 2:
-                    audiofile['date'] = self.New_property_input.text()
-                    self.Log_hint.setText(f"({repeat}) Upated year for {len(file_path)} song(s)")
-                elif type == 3:
-                    audiofile['genre'] = self.New_property_input.text()
-                    self.Log_hint.setText(f"({repeat}) Upated genre for {len(file_path)} song(s)")
+                
+                audiofile[choices[self.Type_selection.currentIndex()]] = self.New_property_input.text()
+                self.Log_hint.setText(f"({repeat}) Upated {choices[self.Type_selection.currentIndex()]} for {len(file_path)} song(s)")
                 
                 audiofile.save()
         except Exception as e:
