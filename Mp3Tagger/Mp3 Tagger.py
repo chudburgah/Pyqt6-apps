@@ -4,6 +4,7 @@ import sys
 from mutagen.easyid3 import EasyID3
 
 script_dir = Path(__file__).resolve().parent
+repeat = 0
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -54,36 +55,42 @@ class MainWindow(QMainWindow):
     def Update_file(self):
         try:
             for i in range(len(file_path)):
+                global repeat
                 audio = file_path[i]
                 audiofile = EasyID3(audio)
                 type = self.Type_selection.currentIndex()
-                    
+                repeat += 1
+                
+                print(repeat)
                 print(self.Type_selection.currentIndex())
                 if type == 0:
                     audiofile['album'] = self.New_property_input.text()
-                    self.Log_hint.setText(f"Upated album for {len(file_path)} song(s)")
+                    self.Log_hint.setText(f"({repeat}) Upated album for {len(file_path)} song(s)")
                 elif type == 1:
                     audiofile['artist'] = self.New_property_input.text()
-                    self.Log_hint.setText(f"Upated artist for {len(file_path)} song(s)")
+                    self.Log_hint.setText(f"({repeat}) Upated artist for {len(file_path)} song(s)")
                 elif type == 2:
                     audiofile['date'] = self.New_property_input.text()
-                    self.Log_hint.setText(f"Upated year for {len(file_path)} song(s)")
+                    self.Log_hint.setText(f"({repeat}) Upated year for {len(file_path)} song(s)")
                 elif type == 3:
                     audiofile['genre'] = self.New_property_input.text()
-                    self.Log_hint.setText(f"Upated genre for {len(file_path)} song(s)")
+                    self.Log_hint.setText(f"({repeat}) Upated genre for {len(file_path)} song(s)")
                 
                 audiofile.save()
         except Exception as e:
             self.Log_hint.setText(f"Error: {e}")
     
     def Input_hint(self, i):
+        global repeat
+        repeat = 0
+        
         if i == 0:
             self.New_property_input.setPlaceholderText("e.g. I Wish")
-        if i == 1:
+        elif i == 1:
             self.New_property_input.setPlaceholderText("e.g. Skee-Lo")
-        if i == 2:
+        elif i == 2:
             self.New_property_input.setPlaceholderText("e.g. 1995")
-        if i == 3:
+        elif i == 3:
             self.New_property_input.setPlaceholderText("e.g. Hip-Hop")
 
 app = QApplication(sys.argv)
