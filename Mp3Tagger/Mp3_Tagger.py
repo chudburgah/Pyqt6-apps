@@ -83,4 +83,3 @@ class MainWindow(QMainWindow):
             self.New_property_input.setPlaceholderText("e.g. 1995")
         elif i == 3:
             self.New_property_input.setPlaceholderText("e.g. Hip-Hop")
-

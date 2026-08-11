@@ -216,12 +216,6 @@ class FileSelection(QDialog):
         if s != "None":
             self.selection = script_dir / "savedLists" / s
 
-app = QApplication(sys.argv)
-
-window = MainWindow()
-window.show()
-
-app.exec()
 
 settings.update({'dateToggle': str(timeToggled)})
 with open(config_dir, "w") as f:
