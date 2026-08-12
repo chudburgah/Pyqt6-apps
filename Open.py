@@ -35,7 +35,7 @@ class MainWindow(QMainWindow):
         else:
             self.Mp3TaggerSubwindow.raise_()
     def ListApp_open(self):
-        if self.Mp3TaggerSubwindow is None:
+        if self.ListAppSubWindow is None:
             self.ListAppSubWindow = ListAppWindow()
             self.ListAppSubWindow.show()
         else:
