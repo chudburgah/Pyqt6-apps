@@ -1,8 +1,7 @@
 from PyQt6.QtWidgets import *
 from pathlib import Path
 import sys
-from Mp3Tagger.Mp3_Tagger import MainWindow as Mp3TaggerWindow
-from ListApp.listApp import MainWindow as ListAppWindow
+from Mp3Tagger.Mp3_Tagger import MainWindow as Mp3TaggerWindow; from ListApp.listApp import MainWindow as ListAppWindow
 script_dir = Path(__file__).resolve().parent
 
 class MainWindow(QMainWindow):
