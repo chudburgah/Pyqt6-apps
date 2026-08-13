@@ -1,1 +1,7 @@
-it just told me to put this here so idk bruh
+# This is a bunch of apps created using PyQt6 all made for school
+
+[Pyqt6](https://pypi.org/project/PyQt6/) is python module used to create GUI's for python
+
+This is all for school and (most likely) no one but me will ever read this so idk why im even puting this here 💔
+
+Right now it only has the 2 apps that can be accesed from `Open.py` but it do plan on making more 
