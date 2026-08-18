@@ -7,3 +7,4 @@ This is all for school and (most likely) no one but me will ever read this so id
 Right now it only has the 2 apps that can be accesed from `Open.py` but it do plan on making more.
 
 ![This is an alt text.](https://i.imgur.com/36c46OX.png)
+![This is an alt text.](awwww_so_cute.png)
