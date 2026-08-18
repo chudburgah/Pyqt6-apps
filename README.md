@@ -6,4 +6,4 @@ This is all for school and (most likely) no one but me will ever read this so id
 
 Right now it only has the 2 apps that can be accesed from `Open.py` but it do plan on making more.
 
-![This is an alt text.](https://raw.githubusercontent.com/chudburgah/Imagesforreadme/refs/heads/main/Screenshot%202025-07-21%20143516.png)
+![This is an alt text.](https://i.imgur.com/36c46OX.png)
