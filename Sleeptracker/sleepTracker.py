@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import *; from PyQt6.QtCore import *
 import json
 import datetime
 from pathlib import Path
+from pprint import pprint
 import sys
 script_dir = Path(__file__).resolve().parent
 
@@ -15,6 +16,7 @@ class MainWindow(QMainWindow):
         self.addSleep_b = QPushButton("Add sleep")
         self.totalSeep_b = QPushButton("Total hours slept")
         self.table = QTableWidget(7, 2)
+        self.dateLabel = QLabel(f"Today is {datetime.datetime.now().strftime("%A")}")
 
         self.table.setHorizontalHeaderLabels(["Day", "Hours"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
@@ -23,33 +25,26 @@ class MainWindow(QMainWindow):
         self.table.setMaximumHeight(230) 
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         
-        with open(script_dir/"sleepHours.json", "r") as f:
-            son = json.loads(f)
+        with open(script_dir/"sleepHours.json") as json_file:
+            json_data = json.load(json_file)
         
-        days = [
-            ("Mon", "?"),
-            ("Tus", "?"),
-            ("Wed", "?"),
-            ("Thu", "?"), 
-            ("Fri", "?"),
-            ("Sat", "?"),
-            ("Sun", "?")
-        ]
+        days = ["Mon", "Tus", "Wed", "Thu", "Fri", "Sat", "Sun"]
         date = datetime.datetime.now()
-        print(date)
-        print(son)
-        
-        for row_idx, row_data in enumerate(days):
-            for col_idx, value in enumerate(row_data):
-                # Every item must be wrapped in a QTableWidgetItem
-                item = QTableWidgetItem(value)
-                self.table.setItem(row_idx, col_idx, item)
+        print(date.strftime("%w"))
+        for i in range(7):
+            index_val = json_data["Current_week"][str(i+1)]
+            self.table.setItem(i, 0, QTableWidgetItem(days[i]))
+            self.table.setItem(i, 1, QTableWidgetItem(index_val))
         
         layout1 = QVBoxLayout()
         layout2 = QHBoxLayout()
+        layout3 = QVBoxLayout()
+        
+        layout3.addWidget(self.dateLabel)
+        layout3.addWidget(self.addSleep_b)
         
         layout2.addWidget(self.table)
-        layout2.addWidget(self.addSleep_b)
+        layout2.addLayout(layout3)
         
         layout1.addLayout(layout2)
         layout1.addWidget(self.totalSeep_b)
