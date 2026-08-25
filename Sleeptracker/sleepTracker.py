@@ -55,14 +55,16 @@ class MainWindow(QMainWindow):
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         
         self.addSleep_b.clicked.connect(self.Add_Sleep)
-        #self.totalSeep_b.clicked.connect(self.Total_Sleep)
+        self.totalSeep_b.clicked.connect(self.Total_Sleep)
         
         with open(script_dir/"sleepHours.json", 'r') as json_file:
-            json_data = json.load(json_file)
+            self.json_data = json.load(json_file)
+        with open(script_dir/"sleepHours.json", 'r') as json_file:
+            self.json_old = json.load(json_file)
         days = ["Sun", "Mon", "Tus", "Wed", "Thu", "Fri", "Sat"]
         
         for i in range(7):
-            index_val = json_data["Current_week"][str(i)]
+            index_val = self.json_data["Current_week"][str(i)]
             self.table.setItem(i, 0, QTableWidgetItem(days[i]))
             self.table.setItem(i, 1, QTableWidgetItem(str(index_val)))
         
@@ -87,18 +89,33 @@ class MainWindow(QMainWindow):
         dlg = QInputDialog()
         dlg.setLabelText("How many hours did you sleep:")
         
-        clickedButton = dlg.exec()
-        if clickedButton == 1:
+        if dlg.exec():
             try:
                 self.table.setItem(int(datetime.datetime.now().strftime("%w")), 1, QTableWidgetItem(str(int(dlg.textValue()))))
                 
-                with open(script_dir/"sleepHours.json", 'r') as json_file:
-                    json_data = json.load(json_file)
-                json_data["Current_week"][datetime.datetime.now().strftime("%w")] = int(dlg.textValue())
+                self.json_data["Current_week"][datetime.datetime.now().strftime("%w")] = int(dlg.textValue())
                 with open(script_dir/"sleepHours.json", 'w') as json_file:
-                    json.dump(json_data, json_file, indent=4)
+                    json.dump(self.json_data, json_file, indent=4)
             except:
                 print("Invalid input")
+    def Total_Sleep(self):
+        dlg = QMessageBox()
+        
+        if self.json_data["Total_hours"] == None:
+            for i in range(7):
+                if self.json_old["Current_week"][str(i)] == self.json_data["Current_week"][str(i)]:
+                    if self.json_data["Total_hours"] == None:
+                        new = 0
+                    else:
+                        new = int(self.json_data["Current_week"][str(i)])
+                    if self.json_old["Total_hours"] == None:
+                        old = 0
+                    else:
+                        old = int(self.json_old["Current_week"][str(i)])
+                    print(old-new)
+        dlg.setText(f"Total hours slept {self.json_data["Total_hours"]}")
+        
+        dlg.exec()        
             
 app = QApplication(sys.argv)
 
