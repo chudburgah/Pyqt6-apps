@@ -10,20 +10,49 @@ class MainWindow(QMainWindow):
         super().__init__()
         
         self.setWindowTitle("Sleep Tracker")
+        self.resize(200,300)
         
         self.addSleep_b = QPushButton("Add sleep")
-        self.table = QTableWidget()
-        self.table.setRowCount(7)
-        self.table.setColumnCount(2)
-        self.table.setItem(1,1, QTableWidgetItem("yo bro"))
-        self.table.setMaximumWidth(219) 
- #       self.table.setColumnWidth(1, 100)
-#        self.table.setColumnWidth(0, 100)
+        self.totalSeep_b = QPushButton("Total hours slept")
+        self.table = QTableWidget(7, 2)
+
+        self.table.setHorizontalHeaderLabels(["Day", "Hours"])
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.table.setFixedWidth(150)
+        self.table.setMaximumHeight(230) 
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        layout1 = QVBoxLayout()
         
-        layout1.addWidget(self.addSleep_b)
-        layout1.addWidget(self.table)
+        with open(script_dir/"sleepHours.json", "r") as f:
+            son = json.loads(f)
+        
+        days = [
+            ("Mon", "?"),
+            ("Tus", "?"),
+            ("Wed", "?"),
+            ("Thu", "?"), 
+            ("Fri", "?"),
+            ("Sat", "?"),
+            ("Sun", "?")
+        ]
+        date = datetime.datetime.now()
+        print(date)
+        print(son)
+        
+        for row_idx, row_data in enumerate(days):
+            for col_idx, value in enumerate(row_data):
+                # Every item must be wrapped in a QTableWidgetItem
+                item = QTableWidgetItem(value)
+                self.table.setItem(row_idx, col_idx, item)
+        
+        layout1 = QVBoxLayout()
+        layout2 = QHBoxLayout()
+        
+        layout2.addWidget(self.table)
+        layout2.addWidget(self.addSleep_b)
+        
+        layout1.addLayout(layout2)
+        layout1.addWidget(self.totalSeep_b)
         
         contianer = QWidget()
         contianer.setLayout(layout1)
