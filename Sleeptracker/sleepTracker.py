@@ -31,7 +31,7 @@ with open(script_dir/"sleepHours.json", "r") as f:
         "5": null,
         "6": null
     },
-    "Total_hours": null
+    "Total_hours": 0
 }''')
 
 class MainWindow(QMainWindow):
@@ -57,10 +57,8 @@ class MainWindow(QMainWindow):
         self.addSleep_b.clicked.connect(self.Add_Sleep)
         self.totalSeep_b.clicked.connect(self.Total_Sleep)
         
-        with open(script_dir/"sleepHours.json", 'r') as json_file:
-            self.json_data = json.load(json_file)
-        with open(script_dir/"sleepHours.json", 'r') as json_file:
-            self.json_old = json.load(json_file)
+        self.Update_JSON(1), self.Update_JSON(2)
+        
         days = ["Sun", "Mon", "Tus", "Wed", "Thu", "Fri", "Sat"]
         
         for i in range(7):
@@ -84,7 +82,17 @@ class MainWindow(QMainWindow):
         contianer = QWidget()
         contianer.setLayout(layout1)
         self.setCentralWidget(contianer)
-        
+    
+    def Update_JSON(self, new_old):
+        if new_old == 1:
+            with open(script_dir/"sleepHours.json", 'r') as json_file:
+                self.json_data = json.load(json_file)
+            return(self.json_data) 
+        elif new_old == 2:
+            with open(script_dir/"sleepHours.json", 'r') as json_file:
+                    self.json_old = json.load(json_file)
+            return(self.json_old)    
+    
     def Add_Sleep(self):
         dlg = QInputDialog()
         dlg.setLabelText("How many hours did you sleep:")
@@ -98,21 +106,23 @@ class MainWindow(QMainWindow):
                     json.dump(self.json_data, json_file, indent=4)
             except:
                 print("Invalid input")
+    
     def Total_Sleep(self):
         dlg = QMessageBox()
+        self.Update_JSON(1)
         
-        if self.json_data["Total_hours"] == None:
-            for i in range(7):
-                if self.json_old["Current_week"][str(i)] == self.json_data["Current_week"][str(i)]:
-                    if self.json_data["Total_hours"] == None:
-                        new = 0
-                    else:
-                        new = int(self.json_data["Current_week"][str(i)])
-                    if self.json_old["Total_hours"] == None:
-                        old = 0
-                    else:
-                        old = int(self.json_old["Current_week"][str(i)])
-                    print(old-new)
+        for i in range(7):
+            if self.json_old["Current_week"][str(i)] != self.json_data["Current_week"][str(i)]:
+                try:
+                    old = int(self.json_old["Current_week"][str(i)])
+                except:
+                    old = 0
+                new = int(self.json_data["Current_week"][str(i)])
+                self.Update_JSON(2)
+                self.json_data["Total_hours"] += new-old
+                with open(script_dir/"sleepHours.json", 'w') as json_file:
+                    json.dump(self.json_data, json_file, indent=4)
+        self.Update_JSON(1)              
         dlg.setText(f"Total hours slept {self.json_data["Total_hours"]}")
         
         dlg.exec()        
