@@ -24,17 +24,19 @@ class MainWindow(QMainWindow):
         self.table.setFixedWidth(150)
         self.table.setMaximumHeight(230) 
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         
-        with open(script_dir/"sleepHours.json") as json_file:
+        self.addSleep_b.clicked.connect(self.Add_Sleep)
+        #self.totalSeep_b.clicked.connect(self.Total_Sleep)
+        
+        with open(script_dir/"sleepHours.json", 'r') as json_file:
             json_data = json.load(json_file)
+        days = ["Sun", "Mon", "Tus", "Wed", "Thu", "Fri", "Sat"]
         
-        days = ["Mon", "Tus", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        date = datetime.datetime.now()
-        print(date.strftime("%w"))
         for i in range(7):
-            index_val = json_data["Current_week"][str(i+1)]
+            index_val = json_data["Current_week"][str(i)]
             self.table.setItem(i, 0, QTableWidgetItem(days[i]))
-            self.table.setItem(i, 1, QTableWidgetItem(index_val))
+            self.table.setItem(i, 1, QTableWidgetItem(str(index_val)))
         
         layout1 = QVBoxLayout()
         layout2 = QHBoxLayout()
@@ -52,6 +54,26 @@ class MainWindow(QMainWindow):
         contianer = QWidget()
         contianer.setLayout(layout1)
         self.setCentralWidget(contianer)
+        
+    def Add_Sleep(self):
+        dlg = QInputDialog()
+        dlg.setLabelText("How many hours did you sleep:")
+        
+        clickedButton = dlg.exec()
+        if clickedButton == 1:
+            try:
+                self.table.setItem(int(datetime.datetime.now().strftime("%w")), 1, QTableWidgetItem(str(int(dlg.textValue()))))
+                
+                with open(script_dir/"sleepHours.json", 'r') as json_file:
+                    json_data = json.load(json_file)
+                    
+                json_data["Current_week"][datetime.datetime.now().strftime("%w")] = int(dlg.textValue())
+                
+                with open(script_dir/"sleepHours.json", 'w') as json_file:
+                    json.dump(json_data, json_file, indent=4)
+            except:
+                print("frick you")
+            
 app = QApplication(sys.argv)
 
 window = MainWindow()
