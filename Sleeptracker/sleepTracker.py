@@ -6,6 +6,34 @@ from pprint import pprint
 import sys
 script_dir = Path(__file__).resolve().parent
 
+
+with open(script_dir/"sleepHours.json", "a"):
+    pass
+with open(script_dir/"sleepHours.json", "r") as f:
+    if f.read() == "":
+        with open(script_dir/"sleepHours.json", "a") as f:
+                f.write('''{
+    "Current_week": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null
+    },
+    "Previous_week": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null
+    },
+    "Total_hours": null
+}''')
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -66,13 +94,11 @@ class MainWindow(QMainWindow):
                 
                 with open(script_dir/"sleepHours.json", 'r') as json_file:
                     json_data = json.load(json_file)
-                    
                 json_data["Current_week"][datetime.datetime.now().strftime("%w")] = int(dlg.textValue())
-                
                 with open(script_dir/"sleepHours.json", 'w') as json_file:
                     json.dump(json_data, json_file, indent=4)
             except:
-                print("frick you")
+                print("Invalid input")
             
 app = QApplication(sys.argv)
 
