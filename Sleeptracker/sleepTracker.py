@@ -124,7 +124,7 @@ class MainWindow(QMainWindow):
                     json.dump(self.json_data, json_file, indent=4)
         self.Update_JSON(1)              
         dlg.setText(f"Total hours slept {self.json_data["Total_hours"]}")
-        
+         
         dlg.exec()        
             
 app = QApplication(sys.argv)
