@@ -13,7 +13,7 @@ with open(script_dir/"sleepHours.json", "r") as f:
     if f.read() == "":
         with open(script_dir/"sleepHours.json", "a") as f:
                 f.write('''{
-    "week_number": null
+    "week_number": null,
     "Current_week": {
         "0": null,
         "1": null,
