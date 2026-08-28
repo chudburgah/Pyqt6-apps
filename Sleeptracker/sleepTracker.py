@@ -44,7 +44,10 @@ class MainWindow(QMainWindow):
         self.addSleep_b = QPushButton("Add sleep")
         self.totalSeep_b = QPushButton("Total hours slept")
         self.table = QTableWidget(7, 2)
-        self.dateLabel = QLabel(f"Today is {datetime.datetime.now().strftime("%A")}")
+        self.dateLabel = QLabel()
+        
+        self.hours_slept()
+        self.dateLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.table.setHorizontalHeaderLabels(["Day", "Hours"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
@@ -69,6 +72,7 @@ class MainWindow(QMainWindow):
         layout1 = QVBoxLayout()
         layout2 = QHBoxLayout()
         layout3 = QVBoxLayout()
+        layout4 = QVBoxLayout()
         
         layout3.addWidget(self.dateLabel)
         layout3.addWidget(self.addSleep_b)
@@ -82,6 +86,18 @@ class MainWindow(QMainWindow):
         contianer = QWidget()
         contianer.setLayout(layout1)
         self.setCentralWidget(contianer)
+    def hours_slept(self):
+        self.Update_JSON(1)
+        numb = 0
+        for i in range(7):
+            try:
+                self.json_data["Current_week"][str(i)] >= 0
+                numb += self.json_data["Current_week"][str(i)]
+            except:
+                pass
+        self.dateLabel.setText(f'''
+        Today is {datetime.datetime.now().strftime("%A")}
+        Total hours slept this week {numb}''')
     
     def Update_JSON(self, new_old):
         if new_old == 1:
@@ -106,6 +122,7 @@ class MainWindow(QMainWindow):
                     json.dump(self.json_data, json_file, indent=4)
             except:
                 print("Invalid input")
+        self.hours_slept()
     
     def Total_Sleep(self):
         dlg = QMessageBox()
