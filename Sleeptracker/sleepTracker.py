@@ -13,7 +13,6 @@ with open(script_dir/"sleepHours.json", "r") as f:
     if f.read() == "":
         with open(script_dir/"sleepHours.json", "a") as f:
                 f.write('''{
-    "week_number": null,
     "Current_week": {
         "0": null,
         "1": null,
@@ -21,7 +20,8 @@ with open(script_dir/"sleepHours.json", "r") as f:
         "3": null,
         "4": null,
         "5": null,
-        "6": null
+        "6": null,
+        "week_number": null
     },
     "Previous_week": {
         "0": null,
@@ -30,7 +30,8 @@ with open(script_dir/"sleepHours.json", "r") as f:
         "3": null,
         "4": null,
         "5": null,
-        "6": null
+        "6": null,
+        "week_number": null
     },
     "Total_hours": 0
 }''')
@@ -54,7 +55,7 @@ class MainWindow(QMainWindow):
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.setFixedWidth(150)
-        self.table.setMaximumHeight(230) 
+        self.table.setMaximumHeight(230)
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         
@@ -73,7 +74,6 @@ class MainWindow(QMainWindow):
         layout1 = QVBoxLayout()
         layout2 = QHBoxLayout()
         layout3 = QVBoxLayout()
-        layout4 = QVBoxLayout()
         
         layout3.addWidget(self.dateLabel)
         layout3.addWidget(self.addSleep_b)
@@ -87,6 +87,7 @@ class MainWindow(QMainWindow):
         contianer = QWidget()
         contianer.setLayout(layout1)
         self.setCentralWidget(contianer)
+
     def hours_slept(self):
         self.Update_JSON(1)
         numb = 0
