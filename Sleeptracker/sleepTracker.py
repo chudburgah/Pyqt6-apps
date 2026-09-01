@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 script_dir = Path(__file__).resolve().parent
 
-
+#attempts to open the file. If it is empty or doesn't exsist it creates the formatted json
 with open(script_dir/"sleepHours.json", "a"):
     pass
 with open(script_dir/"sleepHours.json", "r") as f:
@@ -35,21 +35,26 @@ with open(script_dir/"sleepHours.json", "r") as f:
     "Total_hours": 0
 }''')
 
+#initialize the window 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         
+        #Set the window title and the size of the window
         self.setWindowTitle("Sleep Tracker")
         self.resize(200,300)
         
+        #Creates the buttons, label, and table
         self.addSleep_b = QPushButton("Add sleep")
         self.totalSeep_b = QPushButton("Total hours slept")
         self.table = QTableWidget(7, 2)
         self.dateLabel = QLabel()
         
+        #Update contents and alingment of the 'hours slept this week' label
         self.hours_slept()
         self.dateLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        #Set flags (no scroll bar, max height, etc.)
         self.table.setHorizontalHeaderLabels(["Day", "Hours"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
@@ -58,18 +63,22 @@ class MainWindow(QMainWindow):
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         
+        #Make the buttons do stuff when you press them 
         self.addSleep_b.clicked.connect(self.Add_Sleep)
         self.totalSeep_b.clicked.connect(self.Total_Sleep)
         
+        #Updates vars so the program can read and edit the json file
         self.Update_JSON(1), self.Update_JSON(2)
         
         days = ["Sun", "Mon", "Tus", "Wed", "Thu", "Fri", "Sat"]
         
+        #Populate the table with json data
         for i in range(7):
             index_val = self.json_data["Current_week"][str(i)]
             self.table.setItem(i, 0, QTableWidgetItem(days[i]))
             self.table.setItem(i, 1, QTableWidgetItem(str(index_val)))
         
+        #Layouts to structure the visual elements  
         layout1 = QVBoxLayout()
         layout2 = QHBoxLayout()
         layout3 = QVBoxLayout()
@@ -83,10 +92,12 @@ class MainWindow(QMainWindow):
         layout1.addLayout(layout2)
         layout1.addWidget(self.totalSeep_b)
         
+        #Create a widget with all the nested layouts inside and make it the central widget so we can see it
         contianer = QWidget()
         contianer.setLayout(layout1)
         self.setCentralWidget(contianer)
 
+    #Calculates the total hours slept by comparing the difference 
     def hours_slept(self):
         self.Update_JSON(1)
         numb = 0
