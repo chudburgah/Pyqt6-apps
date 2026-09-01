@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import *; from PyQt6.QtCore import *
 import json
 import datetime
 from pathlib import Path
-from pprint import pprint
 import sys
 script_dir = Path(__file__).resolve().parent
 
@@ -152,3 +151,17 @@ window = MainWindow()
 window.show()
 
 app.exec()
+
+with open(script_dir/"sleepHours.json", "r") as json_file:
+    json_data = json.load(json_file)
+    if json_data["Current_week"]["week_number"] != int(datetime.datetime.now().strftime("%U")):
+        for i in range(7):
+            try:
+                json_data["Current_week"][str(i)] >= 0
+                numb += json_data["Current_week"][str(i)]
+            except:
+                pass
+        with open(script_dir/"sleepHours.json", "w") as json_file0:
+            json_data["Current_week"]["week_number"] = int(datetime.datetime.now().strftime("%U"))
+            json.dump(json_data, json_file0, indent=4)
+        print("changed week")
